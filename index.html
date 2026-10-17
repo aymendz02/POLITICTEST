@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>اختبار الجانب السياسي الجزائري</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,700&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f2e9d6;
+    --paper:#fbf6ea;
+    --paper-2:#f7efdd;
+    --paper-3:#f0e5cc;
+    --ink:#2e2417;
+    --ink-2:#4a3c26;
+    --muted:#8a7960;
+    --dim:#b3a689;
+    --line:rgba(90,65,35,.16);
+    --line-strong:rgba(90,65,35,.32);
+    --neg:#2f5a8c;
+    --pos:#b65a35;
+    --mid:#8a7960;
+    --accent:#7d2f22;
+    --radius:16px;
+    --font-ar:"Tajawal","Segoe UI","Tahoma",sans-serif;
+    --font-serif:"Amiri","Georgia","Times New Roman",serif;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;min-height:100vh;color:var(--ink);
+    font-family:var(--font-ar);font-size:15px;line-height:1.6;
+    -webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;
+    background-color:var(--bg);
+    background-image:
+      radial-gradient(1200px 700px at 18% -10%, rgba(182,90,53,.05), transparent 60%),
+      radial-gradient(1000px 600px at 92% -8%, rgba(47,90,140,.05), transparent 60%),
+      radial-gradient(600px 400px at 50% 110%, rgba(125,47,34,.04), transparent 70%);
+    padding:22px 16px calc(52px + env(safe-area-inset-bottom));
+    position:relative;overflow-x:hidden;
+  }
+  body::before{
+    content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+    opacity:.55;mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.55 0 0 0 0 0.45 0 0 0 0 0.30 0.38 0.38 0.38 0 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    background-size:180px 180px;
+  }
+  .app{max-width:680px;margin:0 auto;position:relative;z-index:1}
+  .screen{display:none}
+  .screen.active{display:block;animation:screenIn .5s cubic-bezier(.22,.61,.36,1) both}
+  @keyframes screenIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+  .topbar{display:none;margin-bottom:20px}
+  .topbar.show{display:block}
+  .topbar-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+  .chip{display:inline-flex;align-items:center;font-size:11px;font-weight:700;color:var(--ink-2);background:var(--paper-2);border:1px solid var(--line);border-radius:99px;padding:6px 14px;white-space:nowrap;max-width:65%;overflow:hidden;text-overflow:ellipsis}
+  .counter{font-size:12px;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums;direction:ltr;letter-spacing:.04em}
+  .progress{height:3px;border-radius:99px;background:var(--line);overflow:hidden}
+  .progress-fill{height:100%;width:0%;border-radius:99px;background:var(--accent);transition:width .5s cubic-bezier(.22,.61,.36,1)}
+
+  .eyebrow{display:inline-block;font-size:10.5px;font-weight:700;color:var(--accent);letter-spacing:.1em;margin-bottom:16px;padding:5px 12px;border:1px solid var(--line-strong);border-radius:99px;background:var(--paper)}
+  h1{font-family:var(--font-serif);font-size:clamp(28px,6.4vw,44px);line-height:1.22;margin:0 0 18px;font-weight:700;color:var(--ink)}
+  h1 em{font-style:normal;color:var(--accent);position:relative;z-index:1}
+  h1 em::after{content:'';position:absolute;left:2px;right:2px;bottom:2px;height:.28em;background:rgba(182,90,53,.22);z-index:-1;border-radius:2px}
+  .lede{font-size:15px;line-height:1.8;color:var(--ink-2);margin:0 0 26px}
+  .lede b{color:var(--ink);font-weight:700}
+
+  .btn{font-family:var(--font-ar);font-weight:700;border-radius:12px;padding:13px 22px;border:1.5px solid transparent;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:transform .16s,background .16s,border-color .16s,box-shadow .16s,color .16s;white-space:nowrap;font-size:14px}
+  .btn:active{transform:translateY(1px)}
+  .btn.primary{background:var(--ink);color:var(--paper);box-shadow:0 1px 0 rgba(0,0,0,.14),0 8px 18px -10px rgba(46,36,23,.6)}
+  .btn.primary:hover{background:var(--accent);box-shadow:0 1px 0 rgba(0,0,0,.14),0 10px 22px -10px rgba(125,47,34,.6)}
+  .btn.ghost{background:var(--paper);border-color:var(--line-strong);color:var(--ink)}
+  .btn.ghost:hover{background:var(--paper-2);border-color:var(--ink-2)}
+  .btn.big{width:100%;padding:16px 22px;font-size:16px;border-radius:14px}
+  .btn:disabled{opacity:.6;cursor:not-allowed}
+
+  .hero{padding:26px 0 10px;text-align:center}
+  .hero .lede{max-width:540px;margin-left:auto;margin-right:auto}
+  .scale-legend{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px 12px;margin-bottom:26px;box-shadow:inset 0 1px 0 rgba(255,255,255,.7)}
+  .scale-legend div{display:flex;flex-direction:column;gap:4px}
+  .scale-legend b{font-family:var(--font-serif);font-size:18px;font-weight:700;line-height:1;direction:ltr}
+  .scale-legend span{font-size:11px;color:var(--muted);font-weight:500}
+  .scale-legend div:nth-child(1) b{color:var(--neg)}
+  .scale-legend div:nth-child(2) b{color:var(--muted)}
+  .scale-legend div:nth-child(3) b{color:var(--pos)}
+  .tiny{font-size:12px;color:var(--muted);margin:16px 0 0}
+
+  .q-card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:34px 24px 24px;box-shadow:inset 0 1px 0 rgba(255,255,255,.85),0 1px 2px rgba(90,65,35,.06),0 22px 44px -22px rgba(90,65,35,.22);position:relative}
+  .q-card::before{content:'';position:absolute;top:0;left:22px;right:22px;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:.45}
+  .q-text{font-family:var(--font-serif);font-size:clamp(19px,3.6vw,24px);line-height:1.55;font-weight:700;margin:0;min-height:3em;color:var(--ink)}
+
+  .readout{text-align:center;margin:28px 0 18px}
+  .readout-num{display:block;font-family:var(--font-serif);font-size:clamp(36px,8vw,46px);font-weight:700;line-height:1;font-variant-numeric:tabular-nums;direction:ltr;transition:color .2s;letter-spacing:-.01em}
+  .readout-lbl{display:block;margin-top:8px;font-size:12px;font-weight:600;color:var(--muted);transition:color .2s}
+
+  .slider{position:relative;height:44px;display:flex;align-items:center;direction:ltr;--thumb-color:var(--muted);margin:0 -2px}
+  .slider-rail{position:absolute;left:0;right:0;height:8px;border-radius:99px;background:var(--paper-3);border:1px solid var(--line);box-shadow:inset 0 1px 2px rgba(90,65,35,.1)}
+  .slider-fill{position:absolute;top:50%;transform:translateY(-50%);height:8px;border-radius:99px;transition:left .07s linear,width .07s linear,background-color .2s}
+  .slider-tick{position:absolute;left:50%;top:50%;width:1px;height:16px;transform:translate(-50%,-50%);background:var(--line-strong);z-index:1}
+  .slider input{position:absolute;inset:0;width:100%;height:100%;-webkit-appearance:none;appearance:none;background:transparent;margin:0;cursor:pointer;direction:ltr}
+  .slider input::-webkit-slider-runnable-track{height:100%;background:transparent;border:none}
+  .slider input::-moz-range-track{height:100%;background:transparent;border:none}
+  .slider input::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:22px;height:22px;border-radius:50%;background:var(--paper);border:2.5px solid var(--thumb-color);box-shadow:0 1px 3px rgba(90,65,35,.35),0 4px 10px rgba(90,65,35,.15);margin-top:11px;transition:transform .13s,border-color .2s;cursor:grab}
+  .slider input::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--paper);border:2.5px solid var(--thumb-color);box-shadow:0 1px 3px rgba(90,65,35,.35),0 4px 10px rgba(90,65,35,.15);transition:transform .13s,border-color .2s;cursor:grab}
+  .slider input:active::-webkit-slider-thumb{transform:scale(1.15);cursor:grabbing}
+  .slider input:active::-moz-range-thumb{transform:scale(1.15);cursor:grabbing}
+  .slider input:focus-visible{outline:none}
+  .slider:has(input:focus-visible){outline:2px solid var(--accent);outline-offset:6px;border-radius:99px}
+  .scale-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:4px;direction:ltr;font-weight:600}
+  .scale-labels span:first-child{direction:rtl}
+  .scale-labels span:last-child{direction:rtl}
+
+  .presets{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:22px}
+  .preset{font-family:var(--font-ar);font-size:12px;font-weight:600;padding:7px 13px;border-radius:99px;cursor:pointer;background:var(--paper);border:1px solid var(--line-strong);color:var(--ink-2);transition:.15s}
+  .preset:hover{background:var(--paper-2);border-color:var(--ink-2);color:var(--ink)}
+  .preset:active{transform:scale(.96)}
+  .preset.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+
+  .q-nav{display:flex;gap:10px;margin-top:26px;padding-top:22px;border-top:1px dashed var(--line-strong)}
+  .q-nav .btn{flex:1}
+  .q-nav .back{flex:0 0 auto;padding-left:20px;padding-right:20px}
+
+  .result-stack{display:flex;flex-direction:column;gap:18px}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:28px 22px 24px;box-shadow:inset 0 1px 0 rgba(255,255,255,.85),0 1px 2px rgba(90,65,35,.06),0 18px 40px -22px rgba(90,65,35,.2);position:relative}
+  .card-hero{padding-top:32px}
+  .result-title{font-family:var(--font-serif);font-size:clamp(26px,5.8vw,36px);line-height:1.2;font-weight:700;margin:0 0 12px;color:var(--ink)}
+  .result-sub{font-size:13.5px;line-height:1.75;color:var(--ink-2);margin:0}
+  .card-title{font-family:var(--font-ar);font-size:12.5px;font-weight:800;color:var(--accent);letter-spacing:.04em;text-transform:uppercase;margin:0 0 18px;padding-bottom:12px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px}
+  .card-title::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0}
+
+  .compass-wrap{position:relative;width:min(220px,60vw);margin:32px auto 42px}
+  .compass{position:relative;width:100%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 50% 50%,var(--paper-2),var(--paper));border:1px solid var(--line-strong);overflow:hidden;box-shadow:inset 0 2px 6px rgba(90,65,35,.09)}
+  .compass-h,.compass-v{position:absolute;background:var(--line-strong)}
+  .compass-h{left:0;right:0;top:50%;height:1px}
+  .compass-v{top:0;bottom:0;left:50%;width:1px}
+  .compass-dot{position:absolute;width:14px;height:14px;border-radius:50%;background:var(--accent);left:50%;top:50%;transform:translate(-50%,-50%);box-shadow:0 0 0 4px rgba(125,47,34,.18),0 2px 8px rgba(90,65,35,.3);transition:left .9s cubic-bezier(.22,.61,.36,1),top .9s cubic-bezier(.22,.61,.36,1);z-index:2}
+  .cl{position:absolute;font-size:10px;font-weight:700;color:var(--muted);white-space:nowrap;letter-spacing:.02em}
+  .cl-top{top:-22px;left:50%;transform:translateX(-50%)}
+  .cl-bottom{bottom:-22px;left:50%;transform:translateX(-50%)}
+  .cl-left{left:-12px;top:50%;transform:translate(-100%,-50%)}
+  .cl-right{right:-12px;top:50%;transform:translate(100%,-50%)}
+
+  .axis-list{display:flex;flex-direction:column;gap:18px;direction:ltr}
+  .axis-row{direction:ltr}
+  .axis-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;gap:12px;flex-direction:row-reverse}
+  .axis-name{font-family:var(--font-ar);font-size:13.5px;font-weight:700;color:var(--ink)}
+  .axis-val{font-family:var(--font-serif);font-size:15px;font-weight:700;font-variant-numeric:tabular-nums;direction:ltr;color:var(--muted)}
+  .axis-track{position:relative;height:9px;border-radius:99px;background:var(--paper-3);border:1px solid var(--line);box-shadow:inset 0 1px 2px rgba(90,65,35,.1);overflow:hidden}
+  .axis-mid{position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--line-strong);z-index:2;transform:translateX(-50%)}
+  .axis-fill{position:absolute;top:0;bottom:0;width:0%;left:50%;transition:width .9s cubic-bezier(.22,.61,.36,1),left .9s cubic-bezier(.22,.61,.36,1);border-radius:99px;z-index:1}
+  .axis-poles{display:flex;justify-content:space-between;font-family:var(--font-ar);font-size:10.5px;color:var(--muted);margin-top:6px;font-weight:600;direction:ltr}
+  .axis-poles span:first-child{direction:rtl;text-align:left}
+  .axis-poles span:last-child{direction:rtl;text-align:right}
+
+  .card-stats{background:linear-gradient(180deg,var(--paper),var(--paper-2));border-color:var(--line-strong)}
+  .stats-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:22px;flex-wrap:wrap}
+  .stats-label{font-size:11px;font-weight:800;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .stats-mode-badge{display:inline-block;font-size:9.5px;font-weight:800;padding:3px 9px;border-radius:99px;letter-spacing:.04em;background:rgba(125,47,34,.1);color:var(--accent);border:1px solid rgba(125,47,34,.3)}
+  .stats-total{font-family:var(--font-serif);font-size:clamp(38px,9vw,54px);font-weight:700;line-height:1;color:var(--ink);font-variant-numeric:tabular-nums;direction:ltr;letter-spacing:-.02em}
+  .stats-you{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:800;color:var(--paper);background:var(--accent);border-radius:99px;padding:7px 13px;box-shadow:0 6px 16px -8px rgba(125,47,34,.8);white-space:nowrap}
+  .stats-you::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--paper);opacity:.9;animation:pulse 1.8s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:.9;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+
+  .dist-list{display:flex;flex-direction:column;gap:14px}
+  .dist-row{display:flex;flex-direction:column;gap:6px;padding:10px 12px;border-radius:10px;transition:background .3s}
+  .dist-row.user{background:rgba(125,47,34,.06);border:1px solid rgba(125,47,34,.18);padding:12px 14px;margin:0 -2px}
+  .dist-row.zero{opacity:.55}
+  .dist-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+  .dist-name{font-size:13px;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .dist-row.user .dist-name{color:var(--accent)}
+  .dist-you-tag{display:inline-block;font-size:9.5px;font-weight:800;color:var(--paper);background:var(--accent);border-radius:99px;padding:2px 8px;letter-spacing:.04em}
+  .dist-pct{font-family:var(--font-serif);font-size:14px;font-weight:700;color:var(--ink-2);font-variant-numeric:tabular-nums;direction:ltr}
+  .dist-row.user .dist-pct{color:var(--accent)}
+  .dist-track{position:relative;height:7px;background:var(--paper-3);border-radius:99px;overflow:hidden;box-shadow:inset 0 1px 2px rgba(90,65,35,.1)}
+  .dist-fill{height:100%;width:0%;background:var(--muted);border-radius:99px;transition:width 1s cubic-bezier(.22,.61,.36,1)}
+  .dist-row.user .dist-fill{background:var(--accent)}
+  .dist-count{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums;direction:ltr}
+
+  .stats-empty{padding:22px 16px;text-align:center;font-size:13px;color:var(--muted);line-height:1.7;background:var(--paper-3);border:1px dashed var(--line-strong);border-radius:10px}
+  .stats-error{padding:16px 14px;text-align:center;font-size:12.5px;color:#8a3b2a;line-height:1.7;background:rgba(182,90,53,.08);border:1px solid rgba(182,90,53,.3);border-radius:10px}
+  .stats-loading{display:flex;align-items:center;justify-content:center;gap:10px;padding:26px 16px;font-size:13px;color:var(--muted)}
+  .spinner{width:16px;height:16px;border:2px solid var(--line-strong);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  .stats-foot{margin:18px 0 0;padding-top:14px;border-top:1px dashed var(--line-strong);font-size:11.5px;color:var(--muted);line-height:1.65;text-align:center;font-style:italic}
+
+  .profile-section{margin-bottom:22px}
+  .profile-section:last-child{margin-bottom:0}
+  .profile-section h3{font-family:var(--font-ar);font-size:12.5px;font-weight:800;color:var(--accent);margin:0 0 10px;letter-spacing:.04em;text-transform:uppercase;display:flex;align-items:center;gap:8px}
+  .profile-section h3::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0}
+  .profile-section p{margin:0;font-size:13.5px;line-height:1.85;color:var(--ink-2)}
+  .figure-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
+  .figure-list li{display:flex;flex-direction:column;gap:2px;padding:11px 13px;background:var(--paper-2);border:1px solid var(--line);border-radius:10px}
+  .fig-name{font-weight:800;font-size:13.5px;color:var(--ink)}
+  .fig-note{font-size:12px;color:var(--muted);line-height:1.5}
+  .country-pills{display:flex;flex-wrap:wrap;gap:6px}
+  .country-pill{display:inline-block;padding:6px 13px;font-size:12px;font-weight:700;background:var(--paper-2);border:1px solid var(--line-strong);border-radius:99px;color:var(--ink-2)}
+  .trait-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
+  .trait-list li{position:relative;padding-right:20px;font-size:13px;line-height:1.6;color:var(--ink-2)}
+  .trait-list li::before{content:'';position:absolute;right:4px;top:.55em;width:6px;height:6px;border-radius:50%;background:var(--accent);opacity:.6}
+  .disclaimer{margin-top:16px;padding-top:14px;border-top:1px dashed var(--line-strong);font-size:11px;color:var(--dim);font-style:italic;text-align:center;line-height:1.6}
+
+  .note{font-size:13px;line-height:1.7;color:var(--ink-2);background:var(--paper-2);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+  .note.warn{border-color:rgba(182,90,53,.38);background:rgba(182,90,53,.07)}
+  .note b{color:var(--ink);font-weight:700}
+
+  .result-actions{display:flex;gap:10px;margin-top:6px}
+  .result-actions .btn{flex:1}
+  footer{text-align:center;color:var(--dim);font-size:11.5px;margin-top:24px;font-style:italic}
+
+  @media (max-width:420px){
+    .q-card,.card{padding:26px 18px 20px}
+    .presets{gap:5px}
+    .preset{font-size:11px;padding:6px 10px}
+    .q-nav .back{padding-left:16px;padding-right:16px}
+    .stats-head{flex-direction:column;align-items:flex-start}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+
+<div class="app" id="app">
+
+  <div class="topbar" id="topbar">
+    <div class="topbar-row">
+      <span class="chip" id="topChip">الاقتصاد</span>
+      <span class="counter" id="topCounter">1 / 30</span>
+    </div>
+    <div class="progress"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+
+  <section class="screen active" id="intro">
+    <div class="hero">
+      <span class="eyebrow">30 عبارة · 4 محاور</span>
+      <h1>ما هو <em>جانبك السياسي</em> الحقيقي في الجزائر؟</h1>
+      <p class="lede">
+        حرّك كل عبارة بين <b>−100%</b> و <b>+100%</b>.
+        تُقيَّم إجاباتك على أربعة محاور، وتُقارن نتيجتك مباشرة مع كل من أكمل الاختبار.
+      </p>
+      <div class="scale-legend">
+        <div><b>−100%</b><span>لا أوافق بشدة</span></div>
+        <div><b>0%</b><span>محايد</span></div>
+        <div><b>+100%</b><span>أوافق بشدة</span></div>
+      </div>
+      <button class="btn primary big" id="startBtn">ابدأ الاختبار</button>
+      <p class="tiny">حوالي 4 دقائق · للترفيه، ليس اختبارًا علميًا</p>
+    </div>
+  </section>
+
+  <section class="screen" id="results">
+    <div class="result-stack">
+
+      <div class="card card-hero">
+        <span class="eyebrow">نتيجتك</span>
+        <h2 class="result-title" id="resTitle">—</h2>
+        <p class="result-sub" id="resSub">—</p>
+        <div class="compass-wrap">
+          <span class="cl cl-top">محافظ / إسلامي</span>
+          <span class="cl cl-bottom">تقدمي / علماني</span>
+          <span class="cl cl-left">يسار / اشتراكي</span>
+          <span class="cl cl-right">يمين / ليبرالي</span>
+          <div class="compass">
+            <div class="compass-h"></div>
+            <div class="compass-v"></div>
+            <div class="compass-dot" id="compassDot"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title">توزيع محاورك</h3>
+        <div class="axis-list" id="axisList"></div>
+      </div>
+
+      <div class="card card-stats">
+        <div class="stats-head">
+          <div>
+            <div class="stats-label">
+              <span>المشاركون حول العالم</span>
+              <span class="stats-mode-badge">مباشر</span>
+            </div>
+            <div class="stats-total" id="statsTotal">0</div>
+          </div>
+          <span class="stats-you" id="statsYou" style="display:none">أنت من بينهم</span>
+        </div>
+        <div id="statsBody">
+          <div class="stats-loading">
+            <span class="spinner"></span>
+            <span>جارٍ تحميل الإحصائيات…</span>
+          </div>
+        </div>
+        <p class="stats-foot" id="statsFoot">—</p>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title">لمحة أيديولوجية</h3>
+        <div class="profile-section"><p id="profileDesc">—</p></div>
+        <div class="profile-section">
+          <h3>شخصيات بارزة تشبهك</h3>
+          <ul class="figure-list" id="profileFigures"></ul>
+        </div>
+        <div class="profile-section">
+          <h3>دول ذات أنظمة مشابهة</h3>
+          <div class="country-pills" id="profileCountries"></div>
+        </div>
+        <div class="profile-section">
+          <h3>سمات أساسية في موقفك</h3>
+          <ul class="trait-list" id="profileTraits"></ul>
+        </div>
+        <div class="profile-section">
+          <h3>موقفك من نظام الحكم</h3>
+          <p id="stateDesc">—</p>
+        </div>
+        <div class="profile-section">
+          <h3>موقفك من السياسة الخارجية</h3>
+          <p id="foreignDesc">—</p>
+        </div>
+        <p class="disclaimer">
+          الشخصيات والدول المذكورة أمثلة تقريبية للتوضيح، وليست تصنيفًا دقيقًا أو حكمًا سياسيًا.
+        </p>
+      </div>
+
+      <div class="note" id="resNote"></div>
+
+      <div class="result-actions">
+        <button class="btn ghost" id="copyBtn">نسخ النتيجة</button>
+        <button class="btn primary" id="retakeBtn">إعادة الاختبار</button>
+      </div>
+
+    </div>
+    <footer>صُنع للترفيه — ليس اختبارًا سياسيًا معتمدًا.</footer>
+  </section>
+
+</div>
+
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+/* ============================================================
+   ⚙️  SUPABASE CONFIG  ← PASTE YOUR KEYS HERE
+   ------------------------------------------------------------
+   Settings → API → Project URL  and  anon public key
+   ============================================================ */
+const SUPABASE_URL      = 'https://njflvzmbapmfcjwbkhqy.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_ExA5972yw1QfL8p39Ood-g_tCldEFgq';
+
+/* ============================================================
+   Supabase client
+   ============================================================ */
+let supabase = null;
+let supabaseConfigured = false;
+
+try {
+  if (SUPABASE_URL && !SUPABASE_URL.includes('YOUR_PROJECT') &&
+      SUPABASE_ANON_KEY && !SUPABASE_ANON_KEY.includes('YOUR_ANON_KEY') &&
+      window.supabase && window.supabase.createClient) {
+    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    supabaseConfigured = true;
+  }
+} catch (e) {
+  console.warn('Supabase init failed:', e);
+}
+
+const SUBMITTED_KEY = 'dz_quiz_submitted_v3';
+
+async function submitResult(category){
+  if (!supabaseConfigured) throw new Error('Supabase not configured');
+  const { error } = await supabase.from('results').insert({ category });
+  if (error) throw error;
+}
+
+async function fetchStats(){
+  if (!supabaseConfigured) throw new Error('Supabase not configured');
+  const { data, error } = await supabase.rpc('get_quiz_stats');
+  if (error) throw error;
+  const dist = {};
+  let total = 0;
+  (data || []).forEach(row => {
+    const c = Number(row.count) || 0;
+    if (c > 0){
+      dist[row.category] = c;
+      total += c;
+    }
+  });
+  return { total, distribution: dist };
+}
+
+/* ============================================================
+   AXES + QUESTIONS
+   ============================================================ */
+const AXES = {
+  econ:    { name:'الاقتصاد',         section:'الاقتصاد',           neg:'يسار / اشتراكي',       pos:'يمين / ليبرالي' },
+  social:  { name:'المجتمع والدين',   section:'المجتمع والدين',     neg:'تقدمي / علماني',        pos:'محافظ / إسلامي' },
+  state:   { name:'نظام الحكم',       section:'نظام الحكم',         neg:'ديمقراطي / إصلاحي',    pos:'وضع قائم / سيادي' },
+  foreign: { name:'السياسة الخارجية', section:'السياسة الخارجية',   neg:'سيادي / مناهض للتدخل', pos:'منفتح / براغماتي' }
+};
+
+const QUESTIONS = [
+  { axis:'econ',    sign:-1, text:'يجب على الدولة أن تلعب دورًا محوريًا في الاقتصاد وتدعم الأسعار والمواد الأساسية.' },
+  { axis:'econ',    sign:+1, text:'يجب تقليص دعم الدولة وفتح الاقتصاد للمنافسة والخصخصة.' },
+  { axis:'econ',    sign:-1, text:'الثروة الوطنية (المحروقات) يجب أن تُوزَّع بعدالة عبر سياسات اجتماعية قوية.' },
+  { axis:'econ',    sign:+1, text:'المؤسسات الصغيرة والقطاع الخاص قادران على خلق فرص عمل أفضل من الدولة.' },
+  { axis:'econ',    sign:-1, text:'الاتحاد العام للعمال الجزائريين (UGTA) يجب أن يبقى قوة أساسية في حماية الحقوق.' },
+  { axis:'econ',    sign:-1, text:'يجب على الدولة تأميم أو السيطرة الكاملة على القطاعات الاستراتيجية كالطاقة والتعدين.' },
+  { axis:'econ',    sign:+1, text:'تشجيع الاستثمار الأجنبي وتسهيل الإجراءات البيروقراطية أمامه ضروري للنمو الاقتصادي.' },
+  { axis:'econ',    sign:-1, text:'فرض ضريبة تصاعدية على الثروات الكبيرة لتمويل الخدمات العامة أمر ضروري.' },
+
+  { axis:'social',  sign:-1, text:'يجب فصل الدين عن الدولة وضمان حياد المؤسسات العامة تجاه المعتقدات.' },
+  { axis:'social',  sign:+1, text:'يجب أن تسترشد القوانين بالشريعة الإسلامية والموروث الديني للمجتمع.' },
+  { axis:'social',  sign:-1, text:'قانون الأسرة يجب أن يُعدَّل لتحقيق المساواة الكاملة بين الرجل والمرأة.' },
+  { axis:'social',  sign:+1, text:'اللغة العربية يجب أن تبقى اللغة الرسمية الوحيدة في الإدارة والتعليم.' },
+  { axis:'social',  sign:-1, text:'اللغة الأمازيغية يجب أن تُعزَّز وتُدرَّس وتُستخدم رسميًا على قدم المساواة.' },
+  { axis:'social',  sign:-1, text:'يجب أن تكون المرأة حرة في اختيار ملابسها وزواجها دون ضغوط اجتماعية أو قانونية.' },
+  { axis:'social',  sign:+1, text:'قانون الأسرة الحالي يحمي تماسك الأسرة الجزائرية ويجب عدم المساس به.' },
+  { axis:'social',  sign:-1, text:'المجتمع يحتاج إلى نقاش مفتوح حول قضايا اجتماعية حساسة دون وصاية.' },
+
+  { axis:'state',   sign:-1, text:'يجب أن يقتصر دور الجيش على الدفاع الوطني ولا يتدخل في السياسة.' },
+  { axis:'state',   sign:+1, text:'استقرار البلاد يتطلب بقاء المؤسسة العسكرية ضامنة للأمن والنظام.' },
+  { axis:'state',   sign:-1, text:'يجب انتخاب رئيس الجمهورية عبر انتخابات حرة ونزيهة دون تدخل الإدارة.' },
+  { axis:'state',   sign:+1, text:'تعديل الدستور وقانون الأحزاب يجب أن يمرّا عبر مؤسسات الدولة الحالية.' },
+  { axis:'state',   sign:-1, text:'مطالب الحراك الشعبي (2019) بالتغيير الجذري ما زالت مشروعة.' },
+  { axis:'state',   sign:+1, text:'الأمن والاستقرار أهم من المطالب المتكررة بالتغيير الجذري.' },
+  { axis:'state',   sign:-1, text:'يجب ضمان التداول السلمي للسلطة ووضع حدود دستورية صارمة لفترات الرئاسة.' },
+
+  { axis:'foreign', sign:-1, text:'يجب محاسبة فرنسا على جرائم الاستعمار والاعتذار الرسمي قبل أي تطبيع.' },
+  { axis:'foreign', sign:+1, text:'المصلحة الوطنية تقتضي إعادة بناء علاقات متوازنة مع فرنسا والغرب.' },
+  { axis:'foreign', sign:-1, text:'دعم حق تقرير المصير للشعب الصحراوي واجب مبدئي لا يمكن التنازل عنه.' },
+  { axis:'foreign', sign:+1, text:'يجب تحسين العلاقات مع المغرب والدول المجاورة حتى لو تطلب الأمر تنازلات.' },
+  { axis:'foreign', sign:-1, text:'الجزائر يجب أن تبقى حليفًا قويًا للقضايا العربية والإسلامية في المحافل الدولية.' },
+  { axis:'foreign', sign:+1, text:'التعاون الأمني والعسكري مع القوى الكبرى ضروري لحماية المصالح الوطنية.' },
+  { axis:'foreign', sign:+1, text:'المصلحة الوطنية فوق أي مبدأ، ويجب على الجزائر أن تتكيف مع النظام الدولي بدل مواجهته.' }
+];
+
+const PRESETS = [
+  { v:-100, label:'لا أوافق بشدة' },
+  { v:-50,  label:'لا أوافق' },
+  { v:0,    label:'محايد' },
+  { v:+50,  label:'أوافق' },
+  { v:+100, label:'أوافق بشدة' }
+];
+
+const COLOR_NEG = '#2f5a8c';
+const COLOR_POS = '#b65a35';
+const COLOR_MID = '#8a7960';
+
+/* ============================================================
+   PROFILES
+   ============================================================ */
+const PROFILES = {
+  left_prog: {
+    label:'تقدمي / يساري',
+    desc: 'تجمع بين الإيمان بدور الدولة في تحقيق العدالة الاجتماعية وإعادة توزيع الثروة، والدفاع عن الحريات الفردية والثقافية. ترى أن الحرية الاقتصادية بدون عدالة اجتماعية ناقصة، وأن العدالة بدون حريات شخصية قمع.',
+    figures: [
+      { name:'حسين آيت أحمد', note:'زعيم تاريخي، مؤسس جبهة القوى الاشتراكية، ديمقراطي يساري' },
+      { name:'مولود معمري', note:'كاتب وأنثروبولوجي، مدافع عن الهوية الأمازيغية' },
+      { name:'بيرني ساندرز', note:'سياسي أمريكي، اشتراكي ديمقراطي' },
+      { name:'نعوم تشومسكي', note:'مفكر لاسلطوي، ناقد للنظام الرأسمالي' }
+    ],
+    countries: ['النرويج','السويد','الدنمارك','أوروغواي'],
+    traits: ['ضريبة تصاعدية وخدمات عامة قوية','فصل الدين عن الدولة','دعم الحقوق الفردية والثقافية','تشكيك في النموذج النيوليبرالي']
+  },
+  left_trad: {
+    label:'وطني اجتماعي',
+    desc: 'يرى أن الدولة يجب أن تلعب دورًا قويًا في الاقتصاد لتحقيق العدالة، مع الحفاظ على الهوية الدينية والثقافية للمجتمع. يعتبر أن القيم التقليدية والأسرة هي أساس الاستقرار، وأن الليبرالية الاقتصادية والثقافية الغربية تهديد للهوية.',
+    figures: [
+      { name:'عبد الحميد بن باديس', note:'مصلح إسلامي، مؤسس جمعية العلماء المسلمين' },
+      { name:'أحمد بن بلة', note:'أول رئيس للجزائر المستقلة، اشتراكي عربي' },
+      { name:'فلاديمير بوتين', note:'دولة قوية + محافظة اجتماعية' },
+      { name:'رجب طيب أردوغان', note:'إسلامي محافظ + اقتصاد موجه' }
+    ],
+    countries: ['روسيا','تركيا','إيران','المجر'],
+    traits: ['دور قوي للدولة في الاقتصاد','محافظة اجتماعية ودينية','تشكيك في النموذج الغربي','تشديد على الهوية الوطنية']
+  },
+  right_prog: {
+    label:'ليبرالي / إصلاحي',
+    desc: 'يؤمن بأن السوق الحرة والمنافسة هما أفضل طريق للنمو، مع الدفاع عن الحريات الفردية والثقافية. يرى أن الحرية الاقتصادية والاجتماعية مترابطتان، وأن تقليص دور الدولة يخدم الازدهار.',
+    figures: [
+      { name:'إيمانويل ماكرون', note:'وسط ليبرالي، إصلاحات سوقية' },
+      { name:'جاستن ترودو', note:'ليبرالي كندي، تقدمي اجتماعيًا' },
+      { name:'لي كوان يو', note:'مهندس المعجزة الاقتصادية السنغافورية' },
+      { name:'ميلتون فريدمان', note:'اقتصادي ليبرالي، منظر السوق الحرة' }
+    ],
+    countries: ['كندا','ألمانيا','هولندا','إستونيا'],
+    traits: ['خصخصة وتقليل البيروقراطية','حريات فردية قوية','انفتاح اقتصادي','تشجيع الابتكار والمبادرة']
+  },
+  right_trad: {
+    label:'محافظ / يميني',
+    desc: 'يجمع بين الإيمان بالسوق الحرة والقطاع الخاص، والمحافظة على القيم الدينية والتقليدية. يرى أن الأسرة والدين هما أساس المجتمع، وأن الدولة يجب أن تحمي هذه القيم مع تقليل تدخلها في الاقتصاد.',
+    figures: [
+      { name:'دونالد ترامب', note:'يميني شعبوي، رأسمالي' },
+      { name:'فيكتور أوربان', note:'محافظ وطني، رئيس وزراء المجر' },
+      { name:'حزب القانون والعدالة البولندي', note:'محافظ كاثوليكي' },
+      { name:'بعض رجال الأعمال المحافظين', note:'يدعمون السوق مع القيم التقليدية' }
+    ],
+    countries: ['الولايات المتحدة (الجناح المحافظ)','بولندا','المجر','السعودية (اقتصاديًا)'],
+    traits: ['سوق حرة وخصخصة','محافظة دينية واجتماعية','تشديد على الهوية الوطنية','تشكيك في العولمة الثقافية']
+  },
+  centrist: {
+    label:'وسطي',
+    desc: 'تفضل البراغماتية والتوازن، وتتخذ مواقف من اليسار في بعض القضايا واليمين في أخرى. ترى أن الحلول العملية أهم من الأيديولوجيا، وأن الاستقرار والوفاق أساسيان.',
+    figures: [
+      { name:'أنغيلا ميركل', note:'وسطية براغماتية، مستشارة ألمانيا السابقة' },
+      { name:'مانموهان سينغ', note:'اقتصادي إصلاحي، رئيس وزراء الهند السابق' }
+    ],
+    countries: ['ألمانيا (عهد ميركل)','الهند','سنغافورة'],
+    traits: ['براغماتية','توازن بين الدولة والسوق','وسطية اجتماعية','تفضيل الاستقرار والوفاق']
+  },
+  soc_prog: {
+    label:'تقدمي اجتماعيًا',
+    desc: 'يركز على الحقوق المدنية والحريات الفردية، مع موقف اقتصادي معتدل. يرى أن الحرية الشخصية والمساواة هي القيم الأساسية، وأن الدولة يجب أن تحمي هذه الحقوق دون التدخل في الاقتصاد بشكل كبير.',
+    figures: [
+      { name:'جاستن ترودو', note:'ليبرالي تقدمي، رئيس وزراء كندا' },
+      { name:'خوسيه موخيكا', note:'رئيس أوروغواي السابق، تقدمي معتدل' }
+    ],
+    countries: ['أوروغواي','نيوزيلندا','كندا'],
+    traits: ['حقوق مدنية قوية','اقتصاد معتدل','علمانية','تسامح ثقافي']
+  },
+  soc_cons: {
+    label:'محافظ اجتماعيًا',
+    desc: 'يهتم بالقيم الدينية والتقليدية والأسرة، مع موقف اقتصادي معتدل. يرى أن الحفاظ على الهوية الثقافية والدينية أساس الاستقرار، دون بالضرورة تبنّي الليبرالية الاقتصادية الكاملة.',
+    figures: [
+      { name:'فيكتور أوربان', note:'محافظ اجتماعيًا، رئيس وزراء المجر' },
+      { name:'التيارات الإسلامية المحافظة', note:'تركز على القيم والأسرة' }
+    ],
+    countries: ['بولندا','المجر','بعض دول الخليج'],
+    traits: ['محافظة دينية','تماسك أسري','هوية وطنية','حذر من التغيير الثقافي السريع']
+  },
+  econ_left: {
+    label:'يساري اقتصاديًا',
+    desc: 'يركز على العدالة الاجتماعية وإعادة توزيع الثروة، مع موقف اجتماعي معتدل. يرى أن الدولة يجب أن تلعب دورًا في الاقتصاد لتصحيح الفوارق، دون بالضرورة فرض رؤية اجتماعية صارمة.',
+    figures: [
+      { name:'لويس إيناسيو لولا دا سيلفا', note:'رئيس البرازيل، يساري عمالي' },
+      { name:'توماس مونتسرات', note:'اقتصادي يساري' }
+    ],
+    countries: ['البرازيل (عهد لولا)','الأرجنتين (بيرونية)','تشيلي (اشتراكية)'],
+    traits: ['ضرائب تصاعدية','خدمات عامة قوية','دور اقتصادي للدولة','توزيع عادل للثروة']
+  },
+  econ_right: {
+    label:'يميني اقتصاديًا',
+    desc: 'يركز على الحرية الاقتصادية والسوق، مع موقف اجتماعي معتدل. يرى أن تقليل الضرائب والتنظيم يعزز النمو، دون بالضرورة تبنّي خطاب محافظ اجتماعيًا.',
+    figures: [
+      { name:'لي كوان يو', note:'مهندس المعجزة الاقتصادية السنغافورية' },
+      { name:'ميلتون فريدمان', note:'اقتصادي ليبرالي، منظر السوق الحرة' }
+    ],
+    countries: ['سويسرا','سنغافورة','إستونيا'],
+    traits: ['سوق حرة','ضرائب منخفضة','انفتاح اقتصادي','تشجيع المبادرة الفردية']
+  }
+};
+
+function stateText(v){
+  if (v <= -60) return 'تميل بقوة نحو تقليص سلطة الدولة وتوسيع الحريات الفردية. ترى أن السلطة يجب أن تكون محدودة ومحاسبة، وأن المجتمع المدني هو الضامن الحقيقي للحقوق.';
+  if (v <= -20) return 'تميل نحو تقليص سلطة الدولة. تعتقد أن الحريات الفردية والمجتمع المدني أساسيان، وأن الدولة يجب أن تبقى في حدودها.';
+  if (v < 20)   return 'موقفك من نظام الحكم متوازن. لا تميل بوضوح نحو تقليص سلطة الدولة أو تعزيزها، بل تنظر لكل حالة حسب سياقها.';
+  if (v < 60)   return 'تميل نحو دولة قوية منظمة. ترى أن الاستقرار يتطلب مؤسسات قوية قادرة على حفظ النظام.';
+  return 'تميل بقوة نحو دولة قوية ومركزية. تعتقد أن الأمن والاستقرار يتطلبان سلطة قادرة على اتخاذ قرارات حاسمة.';
+}
+
+function foreignText(v){
+  if (v <= -60) return 'تميل بقوة نحو السيادة الوطنية والدفاع عن القضايا العربية والإسلامية. ترفض التدخل الخارجي وترى أن المبادئ لا تتنازل.';
+  if (v <= -20) return 'تميل نحو السيادة الوطنية. تعتقد أن الجزائر يجب أن تحافظ على استقلال قرارها.';
+  if (v < 20)   return 'موقفك من السياسة الخارجية متوازن. توازن بين السيادة الوطنية والانفتاح.';
+  if (v < 60)   return 'تميل نحو الانفتاح والبراغماتية. ترى أن المصالح الوطنية قد تتطلب مرونة في العلاقات الخارجية.';
+  return 'تميل بقوة نحو الانفتاح والاندماج في النظام الدولي. ترى أن الجزائر يجب أن تتكيف مع الواقع الدولي.';
+}
+
+/* ============================================================
+   STATE
+   ============================================================ */
+const answers = new Array(QUESTIONS.length).fill(0);
+const touched = new Set();
+let current = 0;
+let screens = [];
+let resultText = '';
+
+const app          = document.getElementById('app');
+const resultsEl    = document.getElementById('results');
+const topbar       = document.getElementById('topbar');
+const topChip      = document.getElementById('topChip');
+const topCounter   = document.getElementById('topCounter');
+const progressFill = document.getElementById('progressFill');
+
+function labelFor(v){
+  if (v === 0) return 'محايد';
+  const a = Math.abs(v);
+  const d = v > 0 ? 'أوافق' : 'لا أوافق';
+  if (a <= 20) return d + ' قليلًا';
+  if (a <= 45) return d + ' نوعًا ما';
+  if (a <= 70) return d + ' إلى حد كبير';
+  if (a < 100) return d + ' بشدة';
+  return d + ' تمامًا';
+}
+function colorFor(v){ return v > 0 ? COLOR_POS : v < 0 ? COLOR_NEG : COLOR_MID; }
+function fmtSigned(v){ return v === 0 ? '0%' : (v > 0 ? '+' : '−') + Math.abs(v) + '%'; }
+function fmtNum(n){ return n.toLocaleString('en-US'); }
+
+function animateNumber(el, from, to, duration){
+  if (from === to){ el.textContent = fmtNum(to); return; }
+  const start = performance.now();
+  function frame(now){
+    const t = Math.min(1, (now - start) / duration);
+    const eased = 1 - Math.pow(1 - t, 3);
+    const val = Math.round(from + (to - from) * eased);
+    el.textContent = fmtNum(val);
+    if (t < 1) requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+
+/* Build question screens */
+QUESTIONS.forEach((q, i) => {
+  const sec = document.createElement('section');
+  sec.className = 'screen';
+  sec.id = 'q-screen-' + i;
+
+  const presetsHTML = PRESETS.map(p =>
+    `<button class="preset" data-v="${p.v}">${p.label}</button>`
+  ).join('');
+
+  sec.innerHTML = `
+    <div class="q-card">
+      <p class="q-text">${q.text}</p>
+      <div class="readout">
+        <span class="readout-num" id="num-${i}">0%</span>
+        <span class="readout-lbl" id="lbl-${i}">محايد</span>
+      </div>
+      <div class="slider" id="slider-${i}">
+        <div class="slider-rail"></div>
+        <div class="slider-fill" id="fill-${i}"></div>
+        <div class="slider-tick"></div>
+        <input type="range" min="-100" max="100" step="1" value="0"
+               id="input-${i}" aria-label="السؤال ${i + 1}">
+      </div>
+      <div class="scale-labels">
+        <span>−100% لا أوافق</span>
+        <span>0%</span>
+        <span>+100% أوافق</span>
+      </div>
+      <div class="presets">${presetsHTML}</div>
+      <div class="q-nav">
+        <button class="btn ghost back" type="button">السابق</button>
+        <button class="btn primary next" type="button">${i === QUESTIONS.length - 1 ? 'شاهد نتيجتك' : 'التالي'}</button>
+      </div>
+    </div>
+  `;
+
+  app.insertBefore(sec, resultsEl);
+
+  const input   = sec.querySelector('input[type=range]');
+  const slider  = sec.querySelector('.slider');
+  const numEl   = sec.querySelector('#num-' + i);
+  const lblEl   = sec.querySelector('#lbl-' + i);
+  const fillEl  = sec.querySelector('#fill-' + i);
+  const presets = sec.querySelectorAll('.preset');
+
+  function paint(){
+    const v = answers[i];
+    numEl.textContent = fmtSigned(v);
+    numEl.style.color = v === 0 ? 'var(--muted)' : colorFor(v);
+    lblEl.textContent = labelFor(v);
+    lblEl.style.color = v === 0 ? 'var(--dim)' : 'var(--muted)';
+
+    const half = Math.abs(v) / 2;
+    if (v === 0){
+      fillEl.style.left = '50%';
+      fillEl.style.width = '0%';
+      fillEl.style.backgroundColor = 'transparent';
+    } else if (v > 0){
+      fillEl.style.left = '50%';
+      fillEl.style.width = half + '%';
+      fillEl.style.backgroundColor = COLOR_POS;
+    } else {
+      fillEl.style.left = (50 - half) + '%';
+      fillEl.style.width = half + '%';
+      fillEl.style.backgroundColor = COLOR_NEG;
+    }
+    slider.style.setProperty('--thumb-color', colorFor(v));
+    input.value = v;
+    presets.forEach(btn => btn.classList.toggle('active', Number(btn.dataset.v) === v));
+  }
+
+  function setValue(v){
+    v = Math.max(-100, Math.min(100, Math.round(v)));
+    answers[i] = v;
+    touched.add(i);
+    paint();
+  }
+
+  input.addEventListener('input', e => setValue(Number(e.target.value)));
+  presets.forEach(btn => btn.addEventListener('click', () => setValue(Number(btn.dataset.v))));
+  sec.querySelector('.back').addEventListener('click', () => goTo(current - 1));
+  sec.querySelector('.next').addEventListener('click', () => {
+    if (i === QUESTIONS.length - 1) goTo(screens.length - 1);
+    else goTo(current + 1);
+  });
+
+  sec._paint = paint;
+  paint();
+});
+
+screens = Array.from(document.querySelectorAll('.screen'));
+
+function goTo(n){
+  if (n < 0) n = 0;
+  if (n >= screens.length) n = screens.length - 1;
+  if (n === current) return;
+
+  screens[current].classList.remove('active');
+  current = n;
+  screens[n].classList.add('active');
+
+  updateChrome();
+  if (screens[n] === resultsEl) renderResults();
+  window.scrollTo({ top: 0, behavior: 'auto' });
+
+  const range = screens[n].querySelector('input[type=range]');
+  if (range) setTimeout(() => range.focus({ preventScroll: true }), 60);
+}
+
+function updateChrome(){
+  const isQ = current >= 1 && current <= QUESTIONS.length;
+  topbar.classList.toggle('show', isQ);
+  if (isQ){
+    const i = current - 1;
+    topChip.textContent    = AXES[QUESTIONS[i].axis].section;
+    topCounter.textContent = (i + 1) + ' / ' + QUESTIONS.length;
+    progressFill.style.width = ((i + 1) / QUESTIONS.length * 100) + '%';
+  }
+}
+
+function calculate(){
+  const sum = { econ:0, social:0, state:0, foreign:0 };
+  const cnt = { econ:0, social:0, state:0, foreign:0 };
+  QUESTIONS.forEach((q, i) => {
+    sum[q.axis] += answers[i] * q.sign;
+    cnt[q.axis] += 1;
+  });
+  const out = {};
+  Object.keys(sum).forEach(k => out[k] = Math.round(sum[k] / cnt[k]));
+  return out;
+}
+
+function classify(e, s){
+  const eCent = Math.abs(e) < 20;
+  const sCent = Math.abs(s) < 20;
+  if (eCent && sCent) return 'centrist';
+  if (eCent) return s < 0 ? 'soc_prog' : 'soc_cons';
+  if (sCent) return e < 0 ? 'econ_left' : 'econ_right';
+  if (e < 0 && s < 0) return 'left_prog';
+  if (e < 0 && s > 0) return 'left_trad';
+  if (e > 0 && s < 0) return 'right_prog';
+  return 'right_trad';
+}
+
+function axisWord(v, neg, pos, mid){
+  if (v <= -60) return neg + ' بقوة';
+  if (v <= -20) return 'يميل إلى ' + neg;
+  if (v < 20)   return mid;
+  if (v < 60)   return 'يميل إلى ' + pos;
+  return pos + ' بقوة';
+}
+
+/* Results DOM */
+const axisList   = document.getElementById('axisList');
+const resTitle   = document.getElementById('resTitle');
+const resSub     = document.getElementById('resSub');
+const resNote    = document.getElementById('resNote');
+const compassDot = document.getElementById('compassDot');
+
+const profileDesc      = document.getElementById('profileDesc');
+const profileFigures   = document.getElementById('profileFigures');
+const profileCountries = document.getElementById('profileCountries');
+const profileTraits    = document.getElementById('profileTraits');
+const stateDesc        = document.getElementById('stateDesc');
+const foreignDesc      = document.getElementById('foreignDesc');
+
+const statsTotal = document.getElementById('statsTotal');
+const statsBody  = document.getElementById('statsBody');
+const statsFoot  = document.getElementById('statsFoot');
+const statsYou   = document.getElementById('statsYou');
+
+async function renderResults(){
+  const s = calculate();
+  const key = classify(s.econ, s.social);
+  const profile = PROFILES[key];
+
+  resTitle.textContent = profile.label;
+
+  const econW    = axisWord(s.econ,    'اليسار',      'اليمين',       'وسطي اقتصاديًا');
+  const socialW  = axisWord(s.social,  'التقدمية',    'المحافظة',     'وسطي اجتماعيًا');
+  const stateW   = axisWord(s.state,   'الديمقراطية', 'الوضع القائم', 'متوازن تجاه نظام الحكم');
+  const foreignW = axisWord(s.foreign, 'السيادة',     'الانفتاح',     'متوازن خارجيًا');
+
+  resSub.textContent = `${econW} · ${socialW} · ${stateW} · ${foreignW}`;
+
+  compassDot.style.transition = 'none';
+  compassDot.style.left = '50%';
+  compassDot.style.top  = '50%';
+  void compassDot.offsetWidth;
+  compassDot.style.transition = '';
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    compassDot.style.left = ((s.econ + 100) / 2) + '%';
+    compassDot.style.top  = ((100 - s.social) / 2) + '%';
+  }));
+
+  axisList.innerHTML = '';
+  ['econ','social','state','foreign'].forEach(k => {
+    const v = s[k];
+    const a = AXES[k];
+    const color = v === 0 ? COLOR_MID : colorFor(v);
+    const half = Math.abs(v) / 2;
+
+    const row = document.createElement('div');
+    row.className = 'axis-row';
+    row.innerHTML = `
+      <div class="axis-top">
+        <span class="axis-name">${a.name}</span>
+        <span class="axis-val" style="color:${v === 0 ? 'var(--muted)' : color}">${fmtSigned(v)}</span>
+      </div>
+      <div class="axis-track">
+        <div class="axis-fill"></div>
+        <div class="axis-mid"></div>
+      </div>
+      <div class="axis-poles"><span>${a.neg}</span><span>${a.pos}</span></div>
+    `;
+    axisList.appendChild(row);
+
+    const fill = row.querySelector('.axis-fill');
+    fill.style.left = '50%';
+    fill.style.width = '0%';
+    if (v !== 0){
+      fill.style.backgroundColor = color;
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        if (v > 0){
+          fill.style.left = '50%';
+          fill.style.width = half + '%';
+        } else {
+          fill.style.left = (50 - half) + '%';
+          fill.style.width = half + '%';
+        }
+      }));
+    }
+  });
+
+  profileDesc.textContent = profile.desc;
+  profileFigures.innerHTML = profile.figures.map(f =>
+    `<li><span class="fig-name">${f.name}</span><span class="fig-note">${f.note}</span></li>`
+  ).join('');
+  profileCountries.innerHTML = profile.countries.map(c =>
+    `<span class="country-pill">${c}</span>`
+  ).join('');
+  profileTraits.innerHTML = profile.traits.map(t => `<li>${t}</li>`).join('');
+  stateDesc.textContent   = stateText(s.state);
+  foreignDesc.textContent = foreignText(s.foreign);
+
+  const missing = QUESTIONS.length - touched.size;
+  if (missing > 0){
+    resNote.className = 'note warn';
+    resNote.innerHTML = `<b>تنبيه:</b> ${missing} من الأسئلة لم يتم الإجابة عليها، وحُسبت <b>0%</b> (محايد). حرّك كل المؤشرات للحصول على أدق نتيجة.`;
+  } else {
+    resNote.className = 'note';
+    resNote.innerHTML = `تمت الإجابة على جميع الأسئلة الثلاثين. كل محور هو متوسط أسئلته بعد عكس اتجاه العبارات المعاكسة.`;
+  }
+
+  resultText =
+    `${profile.label}\n` +
+    `الاقتصاد: ${fmtSigned(s.econ)} · المجتمع: ${fmtSigned(s.social)} · ` +
+    `نظام الحكم: ${fmtSigned(s.state)} · الخارجية: ${fmtSigned(s.foreign)}\n` +
+    `${econW} · ${socialW} · ${stateW} · ${foreignW}\n\n` +
+    `${profile.desc}\n\n` +
+    `شخصيات: ${profile.figures.map(f => f.name).join('، ')}\n` +
+    `دول مشابهة: ${profile.countries.join('، ')}`;
+
+  await renderGlobalStats(key);
+}
+
+/* ============================================================
+   GLOBAL STATS
+   ============================================================ */
+async function renderGlobalStats(userKey){
+  const complete = touched.size === QUESTIONS.length;
+  const alreadySubmitted = !!sessionStorage.getItem(SUBMITTED_KEY);
+
+  // Show loading state
+  statsBody.innerHTML = `
+    <div class="stats-loading">
+      <span class="spinner"></span>
+      <span>${complete && !alreadySubmitted ? 'جارٍ حفظ نتيجتك…' : 'جارٍ تحميل الإحصائيات…'}</span>
+    </div>`;
+  statsFoot.textContent = '—';
+  statsYou.style.display = 'none';
+
+  let submitOk = false;
+  let submitErr = null;
+
+  // 1) Insert (once per session, only if quiz complete)
+  if (complete && !alreadySubmitted && supabaseConfigured){
+    try {
+      await submitResult(userKey);
+      sessionStorage.setItem(SUBMITTED_KEY, '1');
+      submitOk = true;
+    } catch (e) {
+      submitErr = e;
+      console.warn('Insert failed:', e);
+    }
+  } else if (alreadySubmitted){
+    submitOk = true; // Already counted in this session
+  }
+
+  // 2) Fetch fresh stats
+  let stats = null;
+  let fetchErr = null;
+  try {
+    stats = await fetchStats();
+  } catch (e) {
+    fetchErr = e;
+    console.warn('Fetch failed:', e);
+  }
+
+  // 3) Handle config missing
+  if (!supabaseConfigured){
+    statsTotal.textContent = '—';
+    statsBody.innerHTML = `
+      <div class="stats-error">
+        <b>لم يتم إعداد الإحصائيات العالمية بعد.</b><br>
+        افتح الملف وعدّل <code>SUPABASE_URL</code> و <code>SUPABASE_ANON_KEY</code> في أعلى الـ script.
+      </div>`;
+    statsFoot.textContent = 'الاختبار يعمل، لكن بدون حفظ النتائج إلى قاعدة البيانات.';
+    return;
+  }
+
+  // 4) Handle fetch error
+  if (fetchErr || !stats){
+    statsTotal.textContent = '—';
+    statsBody.innerHTML = `
+      <div class="stats-error">
+        تعذّر تحميل الإحصائيات الآن. قد تكون قاعدة البيانات غير مهيّأة بعد.
+        <br><br>
+        <small>${(fetchErr && fetchErr.message) ? fetchErr.message : 'Unknown error'}</small>
+      </div>`;
+    statsFoot.textContent = 'تحقق من جدول results ودالة get_quiz_stats في Supabase.';
+    return;
+  }
+
+  const total = stats.total || 0;
+  const dist  = stats.distribution || {};
+
+  // 5) Update "you" pill
+  statsYou.style.display = submitOk ? '' : 'none';
+
+  // 6) Animate total
+  statsTotal.textContent = '0';
+  animateNumber(statsTotal, 0, total, 1100);
+
+  // 7) Distribution
+  if (total === 0){
+    statsBody.innerHTML = `
+      <div class="stats-empty">
+        لا توجد نتائج مسجّلة بعد — كن أول من يكمل الاختبار!
+      </div>`;
+  } else {
+    const entries = Object.keys(PROFILES).map(k => ({
+      key: k,
+      label: PROFILES[k].label,
+      count: dist[k] || 0
+    }));
+    entries.sort((a, b) => b.count - a.count);
+
+    statsBody.innerHTML = '<div class="dist-list"></div>';
+    const list = statsBody.querySelector('.dist-list');
+
+    entries.forEach(entry => {
+      const pct = (entry.count / total) * 100;
+      const pctStr = pct.toFixed(1) + '%';
+      const isUser = entry.key === userKey && submitOk;
+      const isZero = entry.count === 0;
+
+      const row = document.createElement('div');
+      row.className = 'dist-row' + (isUser ? ' user' : '') + (isZero ? ' zero' : '');
+      row.innerHTML = `
+        <div class="dist-head">
+          <div class="dist-name">
+            ${entry.label}
+            ${isUser ? '<span class="dist-you-tag">أنت هنا</span>' : ''}
+          </div>
+          <div class="dist-pct">${isZero ? '—' : pctStr}</div>
+        </div>
+        <div class="dist-track">
+          <div class="dist-fill" style="width:0%"></div>
+        </div>
+        <div class="dist-count">${fmtNum(entry.count)} مشارك</div>
+      `;
+      list.appendChild(row);
+
+      const fill = row.querySelector('.dist-fill');
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        fill.style.width = isZero ? '0%' : Math.max(0.8, pct) + '%';
+      }));
+    });
+  }
+
+  // 8) Footer
+  let foot = '';
+  if (!complete){
+    foot = 'الاختبار غير مكتمل — إجابتك لم تُضف إلى الإحصائيات. أكمل الأسئلة الثلاثين ليُسجَّل صوتك.';
+  } else if (submitErr){
+    foot = 'تعذّر حفظ نتيجتك في قاعدة البيانات. الإحصائيات المعروضة تشمل الآخرين فقط.';
+  } else if (total === 1){
+    foot = 'أنت أول من يكمل الاختبار على مستوى العالم!';
+  } else {
+    const sorted = Object.keys(PROFILES).map(k => ({
+      key: k, count: dist[k] || 0
+    })).sort((a, b) => b.count - a.count);
+    const rank = sorted.findIndex(e => e.key === userKey) + 1;
+    const userCount = dist[userKey] || 0;
+    const userPct = (userCount / total * 100).toFixed(1);
+
+    foot = `نتيجتك مسجّلة ضمن الفئة <b style="color:var(--accent)">${PROFILES[userKey].label}</b> ` +
+      `(${userPct}% من المشاركين · المرتبة ${rank} من حيث الانتشار).`;
+  }
+  statsFoot.innerHTML = foot;
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+document.getElementById('startBtn').addEventListener('click', () => goTo(1));
+
+document.getElementById('retakeBtn').addEventListener('click', () => {
+  try { sessionStorage.removeItem(SUBMITTED_KEY); } catch(e){}
+  answers.fill(0);
+  touched.clear();
+  document.querySelectorAll('.screen[id^="q-screen-"]').forEach(sec => sec._paint());
+  goTo(0);
+});
+
+document.getElementById('copyBtn').addEventListener('click', () => {
+  if (!resultText) return;
+  const btn = document.getElementById('copyBtn');
+  const old = btn.textContent;
+  const done = () => { btn.textContent = 'تم النسخ!'; setTimeout(() => btn.textContent = old, 1500); };
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(resultText).then(done).catch(() => { fallbackCopy(resultText); done(); });
+  } else { fallbackCopy(resultText); done(); }
+});
+
+function fallbackCopy(text){
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); } catch(e){}
+  document.body.removeChild(ta);
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Enter') return;
+  if (current < 1 || current > QUESTIONS.length) return;
+  const active = document.activeElement;
+  if (active && active.tagName === 'BUTTON') return;
+  e.preventDefault();
+  screens[current].querySelector('.next').click();
+});
+
+updateChrome();
+</script>
+</body>
+</html>
