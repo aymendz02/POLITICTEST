@@ -361,6 +361,11 @@ try {
 
 const SUBMITTED_KEY = 'dz_quiz_submitted_v3';
 
+  // Track a visit when the page loads
+if (supabaseConfigured) {
+  supabaseClient.from('visits').insert({}).then();
+}
+
 async function submitResult(category){
   if (!supabaseConfigured) return;
   try {
