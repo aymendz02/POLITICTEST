@@ -366,10 +366,16 @@ if (supabaseConfigured) {
   supabaseClient.from('visits').insert({}).then();
 }
 
-async function submitResult(category){
+async function submitResult(category, econ, social, state, foreign){
   if (!supabaseConfigured) return;
   try {
-    await supabaseClient.from('results').insert({ category });
+    await supabaseClient.from('results').insert({ 
+      category,
+      econ_score: econ,
+      social_score: social,
+      state_score: state,
+      foreign_score: foreign
+    });
   } catch(e) {}
 }
 
