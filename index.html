@@ -324,9 +324,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-/* ============================================================
-   ⚙️ SUPABASE CONFIG (Your Keys)
-   ============================================================ */
 const SUPABASE_URL      = 'https://njflvzmbapmfcjwbkhqy.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_ExA5972yw1QfL8p39Ood-g_tCldEFgq';
 
@@ -340,14 +337,44 @@ try {
   }
 } catch (e) { console.warn('Supabase init failed:', e); }
 
-const SUBMITTED_KEY = 'dz_quiz_submitted_premium_v2';
+const SUBMITTED_KEY = 'dz_quiz_submitted_premium_v3';
+
+// --- TIME TRACKING VARIABLES ---
+const sessionId = crypto.randomUUID();
+const startTime = Date.now();
+let isTracked = false;
+let isCompleted = false;
 
 // 1. Track Visit on Load
 if (supabaseConfigured) {
-  supabaseClient.from('visits').insert({}).then();
+  supabaseClient.from('visits').insert({ session_id: sessionId }).then();
 }
 
-// 2. Submit Result with all 4 Scores
+// 2. Track when they leave (abandon or finish)
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'hidden' && !isTracked && supabaseConfigured) {
+    isTracked = true;
+    const duration = Math.round((Date.now() - startTime) / 1000);
+    
+    // Use fetch with keepalive so it works even if the tab is closed
+    const url = `${SUPABASE_URL}/rest/v1/rpc/track_leave`;
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        p_session_id: sessionId,
+        p_duration: duration,
+        p_completed: isCompleted
+      }),
+      keepalive: true
+    }).catch(e => console.warn('Tracking failed', e));
+  }
+});
+
 async function submitResult(category, econ, social, state, foreign){
   if (!supabaseConfigured) return;
   try {
@@ -358,10 +385,11 @@ async function submitResult(category, econ, social, state, foreign){
       state_score: state,
       foreign_score: foreign
     });
+    // Mark as completed for the time tracker
+    isCompleted = true;
   } catch(e) { console.warn('Insert failed', e); }
 }
 
-// 3. Fetch Global Stats
 async function fetchStats(){
   if (!supabaseConfigured) throw new Error('Supabase not configured');
   const { data, error } = await supabaseClient.rpc('get_quiz_stats');
@@ -379,18 +407,14 @@ async function fetchStats(){
   return { total, distribution: dist };
 }
 
-/* ============================================================
-   DATA & QUESTIONS (UPDATED: Removed Army, Added Security/Jobs)
-   ============================================================ */
 const AXES = {
   econ:    { name:'الاقتصاد',         section:'الاقتصاد',           neg:'يسار / اشتراكي',       pos:'يمين / ليبرالي' },
-  social:  { name:'المجتمع والدين',   section:'المجتمع والدين',     neg:'متحرر / علماني',        pos:'محافظ / إسلامي' },
+  social:  { name:'المجتمع والدين',   section:'المجتمع والدين',     neg:'تقدمي / علماني',        pos:'محافظ / إسلامي' },
   state:   { name:'الحكم والأمن',     section:'نظام الحكم والأمن',  neg:'حريات مطلقة',          pos:'أمن وسلطة قوية' },
   foreign: { name:'السياسة الخارجية', section:'السياسة الخارجية',   neg:'سيادي / مناهض للتدخل', pos:'منفتح / براغماتي' }
 };
 
 const QUESTIONS = [
-  // --- ECONOMY (8) ---
   { axis:'econ',    sign:-1, text:'يجب على الدولة أن تلعب دورًا محوريًا في الاقتصاد وتدعم الأسعار والمواد الأساسية.' },
   { axis:'econ',    sign:+1, text:'يجب تقليص دعم الدولة وفتح الاقتصاد للمنافسة والخصخصة.' },
   { axis:'econ',    sign:-1, text:'الثروة الوطنية (المحروقات) يجب أن تُوزَّع بعدالة عبر سياسات اجتماعية قوية.' },
@@ -399,8 +423,6 @@ const QUESTIONS = [
   { axis:'econ',    sign:-1, text:'يجب على الدولة تأميم أو السيطرة الكاملة على القطاعات الاستراتيجية كالطاقة والتعدين.' },
   { axis:'econ',    sign:+1, text:'تشجيع الاستثمار الأجنبي وتسهيل الإجراءات البيروقراطية أمامه ضروري للنمو الاقتصادي.' },
   { axis:'econ',    sign:-1, text:'يجب على الحكومة توفير وظائف عمومية للشباب للحد من البطالة حتى لو زاد عجز الميزانية.' },
-
-  // --- SOCIAL, SCHOOLS & JOBS (8) ---
   { axis:'social',  sign:-1, text:'يجب فصل الدين عن الدولة وضمان حياد المؤسسات العامة تجاه المعتقدات.' },
   { axis:'social',  sign:+1, text:'يجب أن تسترشد القوانين بالشريعة الإسلامية والموروث الديني للمجتمع.' },
   { axis:'social',  sign:-1, text:'قانون الأسرة يجب أن يُعدَّل لتحقيق المساواة الكاملة بين الرجل والمرأة.' },
@@ -409,8 +431,6 @@ const QUESTIONS = [
   { axis:'social',  sign:-1, text:'يجب أن تكون المرأة حرة في اختيار ملابسها وزواجها دون ضغوط اجتماعية أو قانونية.' },
   { axis:'social',  sign:+1, text:'قانون الأسرة الحالي يحمي تماسك الأسرة الجزائرية ويجب عدم المساس به.' },
   { axis:'social',  sign:+1, text:'التعليم يجب أن يركز على التكوين المهني والمهارات العملية لسوق العمل بدلاً من الشهادات الجامعية النظرية.' },
-
-  // --- STATE, SECURITY & CIVIL LIBERTIES (7) ---
   { axis:'state',   sign:+1, text:'يجب تطبيق عقوبة الإعدام بحق مرتكبي الجرائم الخطيرة كالقتل العمد.' },
   { axis:'state',   sign:+1, text:'يجب على الدولة تركيب المزيد من كاميرات المراقبة في الأماكن العامة للحد من الجريمة.' },
   { axis:'state',   sign:+1, text:'يجب منح الشرطة صلاحيات أوسع لتوقيف المشتبه بهم دون محاكمة فورية لأسباب أمنية.' },
@@ -418,8 +438,6 @@ const QUESTIONS = [
   { axis:'state',   sign:-1, text:'حرية التعبير يجب أن تكون مطلقة، حتى لو تجاوزت الحدود وأثارت غضب بعض الفئات.' },
   { axis:'state',   sign:-1, text:'يجب أن يكون الأفراد أحرارًا تمامًا في حياتهم الخاصة دون أي تدخل من الدولة .' },
   { axis:'state',   sign:-1, text:'حق الإضراب والاحتجاج السلمي حق مقدس، حتى لو تسبب في تعطيل الاقتصاد.' },
-
-  // --- FOREIGN POLICY (7) ---
   { axis:'foreign', sign:-1, text:'يجب محاسبة فرنسا على جرائم الاستعمار والاعتذار الرسمي قبل أي تطبيع.' },
   { axis:'foreign', sign:+1, text:'المصلحة الوطنية تقتضي إعادة بناء علاقات متوازنة مع فرنسا والغرب.' },
   { axis:'foreign', sign:-1, text:'دعم حق تقرير المصير للشعب الصحراوي واجب مبدئي لا يمكن التنازل عنه.' },
@@ -449,9 +467,6 @@ const PROFILES = {
   econ_right: { label:'يميني اقتصاديًا', desc:'يركز على الحرية الاقتصادية والسوق، مع موقف اجتماعي معتدل.', figures:[{ name:'لي كوان يو', note:'مهندس المعجزة الاقتصادية' }], countries:['سويسرا','سنغافورة','إستونيا'], traits:['سوق حرة','ضرائب منخفضة','المبادرة الفردية'] }
 };
 
-/* ============================================================
-   LOGIC & UI
-   ============================================================ */
 const answers = new Array(QUESTIONS.length).fill(0);
 const touched = new Set();
 let current = 0;
@@ -618,9 +633,6 @@ function axisWord(v, neg, pos, mid){
   return pos + ' بقوة';
 }
 
-/* ============================================================
-   RESULTS RENDER
-   ============================================================ */
 const axisList = document.getElementById('axisList');
 const resTitle = document.getElementById('resTitle');
 const resSub = document.getElementById('resSub');
